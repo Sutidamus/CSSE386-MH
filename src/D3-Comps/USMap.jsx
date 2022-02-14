@@ -19,6 +19,10 @@ class USMap extends React.Component {
     this.csvData = [];
   }
 
+  shouldComponentUpdate(nextProps, nextState){
+    return nextState != this.state || nextProps.date != this.props.date
+  }
+
   componentDidMount() {
     // this.fetchData("yup");
     d3.csv("https://raw.githubusercontent.com/Sutidamus/CSSE386-MH/master/data/coordData.csv").then(data => {
@@ -75,6 +79,8 @@ class USMap extends React.Component {
   render() {
     const { topoJSON } = this.state;
 
+    console.log("Map Date: ", this.props.date);
+    
     let map = topoJSON ? (
       <ComposableMap projection={"geoAlbersUsa"}>
         <Geographies geography={this.state.topoJSON}>
