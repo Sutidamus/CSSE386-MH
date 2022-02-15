@@ -1,15 +1,20 @@
 import * as d3 from "d3";
+import { scaleLinear } from "d3";
 import { geoPath } from "d3";
 import axios from "axios";
 import React from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+
+const colorScale = scaleLinear()
+  .domain([0.05, 0.7])
+  .range(["#ffedea", "#ff5233"]);
 
 class USMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       topoJSON: undefined,
-      csvData: []
+      csvData: [],
     };
     this.topoURL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
     // this.dimensions = useResizeObserver
@@ -19,16 +24,18 @@ class USMap extends React.Component {
     this.csvData = [];
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    return nextState != this.state || nextProps.date != this.props.date
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState != this.state || nextProps.date != this.props.date;
   }
 
   componentDidMount() {
     // this.fetchData("yup");
-    d3.csv("https://raw.githubusercontent.com/Sutidamus/CSSE386-MH/master/data/coordData.csv").then(data => {
+    d3.csv(
+      "https://raw.githubusercontent.com/Sutidamus/CSSE386-MH/master/data/HealthData.csv"
+    ).then((data) => {
       console.log("D3 CSV Data: ", data);
       this.csvData = data;
-    })
+    });
   }
 
   handleClick(geo) {
@@ -48,21 +55,25 @@ class USMap extends React.Component {
     console.log(topoJSON);
 
     // Filter by date
+    let csvDat = [...this.csvData];
 
+    csvDat = csvDat.filter(
+      (row) => row["Time Period Start Date"] == this.props.date
+    );
     // attach properties
     let geometries = topoJSON.objects.states.geometries;
     console.log("Geometries: ", geometries);
-    let csvFields = Object.keys(this.csvData[0]);
+    let csvFields = Object.keys(csvDat[0]);
 
     for (let i = 0; i < geometries.length; i++) {
-      for(let j = 0; j < this.csvData.length; j++){
-        let csvObj = this.csvData[j];
+      for (let j = 0; j < csvDat.length; j++) {
+        let csvObj = csvDat[j];
 
-        if(csvObj.State == geometries[i].properties.name){
+        if (csvObj.State == geometries[i].properties.name) {
           // geometries[i].properties
-          csvFields.forEach(field => {
+          csvFields.forEach((field) => {
             geometries[i].properties[field] = csvObj[field];
-          })
+          });
           break;
         }
       }
@@ -80,17 +91,17 @@ class USMap extends React.Component {
     const { topoJSON } = this.state;
 
     console.log("Map Date: ", this.props.date);
-    
+
     let map = topoJSON ? (
       <ComposableMap projection={"geoAlbersUsa"}>
         <Geographies geography={this.state.topoJSON}>
-          {({ geographies }) =>
+        {({ geographies }) =>
             geographies.map((geo) => (
               <Geography
                 key={geo.rsmKey}
                 stroke="#FFF"
                 geography={geo}
-                fill="#DDD"
+                fill={colorScale((geo.properties["% Uninsured"] / 100)*1.5)}
                 onClick={this.handleClick(geo.properties)}
               />
             ))
@@ -106,7 +117,7 @@ class USMap extends React.Component {
                 key={geo.rsmKey}
                 stroke="#FFF"
                 geography={geo}
-                fill="#DDD"
+                fill="#ffedea"
                 onClick={this.handleClick(geo.properties)}
               />
             ))
@@ -118,7 +129,6 @@ class USMap extends React.Component {
     if (this.state.topoJSON) {
       console.log("Rendered: ", this.state.topoJSON.objects.states.geometries);
     } else Math.random();
-
 
     return (
       <div>
