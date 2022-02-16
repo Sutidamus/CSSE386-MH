@@ -21,6 +21,7 @@ class USMap extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.filterData = this.filterData.bind(this);
+    this.onColorVarSelect = this.onColorVarSelect.bind(this);
     this.csvData = [];
   }
 
@@ -87,6 +88,14 @@ class USMap extends React.Component {
     });
   }
 
+  onColorVarSelect(e) {
+    let value = document.querySelector("#colorVarSelect").value;
+    console.log("Color based on: ", value );
+    this.setState({
+      colorVar: value,
+    });
+  }
+
   render() {
     const { topoJSON } = this.state;
 
@@ -95,13 +104,13 @@ class USMap extends React.Component {
     let map = topoJSON ? (
       <ComposableMap projection={"geoAlbersUsa"}>
         <Geographies geography={this.state.topoJSON}>
-        {({ geographies }) =>
+          {({ geographies }) =>
             geographies.map((geo) => (
               <Geography
                 key={geo.rsmKey}
                 stroke="#FFF"
                 geography={geo}
-                fill={colorScale((geo.properties["% Uninsured"] / 100)*1.5)}
+                fill={colorScale((geo.properties["% Uninsured"] / 100) * 1.5)}
                 onClick={this.handleClick(geo.properties)}
               />
             ))
@@ -132,6 +141,12 @@ class USMap extends React.Component {
 
     return (
       <div>
+        <select name="colorVarSelect" id="colorVarSelect" onChange={this.onColorVarSelect}>
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
         {map}
         <input type="data" id="dateSelect" min="2020-01-01" max="2022-01-14" />
         <button onClick={this.fetchData}>GO</button>
