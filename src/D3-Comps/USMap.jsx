@@ -4,6 +4,55 @@ import { geoPath } from "d3";
 import axios from "axios";
 import React from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
+import TimeLine from "../TimeLine";
+
+const VALUES = [
+  "2020-04-23",
+  "2020-05-07",
+  "2020-05-14",
+  "2020-05-21",
+  "2020-05-28",
+  "2020-06-04",
+  "2020-06-11",
+  "2020-06-18",
+  "2020-06-25",
+  "2020-07-02",
+  "2020-07-09",
+  "2020-07-16",
+  "2020-07-22",
+  "2020-08-19",
+  "2020-09-02",
+  "2020-09-16",
+  "2020-09-30",
+  "2020-10-14",
+  "2020-10-28",
+  "2020-11-11",
+  "2020-11-25",
+  "2020-12-09",
+  "2020-12-22",
+  "2021-01-06",
+  "2021-01-20",
+  "2021-02-03",
+  "2021-02-17",
+  "2021-03-03",
+  "2021-03-17",
+  "2021-03-30",
+  "2021-04-14",
+  "2021-04-28",
+  "2021-05-12",
+  "2021-05-26",
+  "2021-06-09",
+  "2021-06-23",
+  "2021-07-06",
+  "2021-07-21",
+  "2021-08-04",
+  "2021-08-18",
+  "2021-09-01",
+  "2021-09-15",
+  "2021-09-29",
+  "2021-10-12",
+  "2021-12-01",
+];
 
 const colorScale = scaleLinear()
   .domain([0.05, 0.7])
@@ -15,6 +64,8 @@ class USMap extends React.Component {
     this.state = {
       topoJSON: undefined,
       csvData: [],
+      date: VALUES[0],
+      index: 0,
     };
     this.topoURL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
     // this.dimensions = useResizeObserver
@@ -22,11 +73,12 @@ class USMap extends React.Component {
     this.fetchData = this.fetchData.bind(this);
     this.filterData = this.filterData.bind(this);
     this.onColorVarSelect = this.onColorVarSelect.bind(this);
+    this.onTimelineDateClick = this.onTimelineDateClick.bind(this);
     this.csvData = [];
-  }
+  }p
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState != this.state || nextProps.date != this.props.date;
+    return nextState != this.state
   }
 
   componentDidMount() {
@@ -52,6 +104,16 @@ class USMap extends React.Component {
       });
   }
 
+  onTimelineDateClick(value) {
+    console.log("Wrapper Date", VALUES[value]);
+    this.setState({
+      date: VALUES[value],
+      index: value,
+    }, newState => {
+      this.fetchData()
+    })
+  }
+
   filterData(topoJSON) {
     console.log(topoJSON);
 
@@ -59,7 +121,7 @@ class USMap extends React.Component {
     let csvDat = [...this.csvData];
 
     csvDat = csvDat.filter(
-      (row) => row["Time Period Start Date"] == this.props.date
+      (row) => row["Time Period Start Date"] == this.state.date
     );
     // attach properties
     let geometries = topoJSON.objects.states.geometries;
@@ -90,7 +152,7 @@ class USMap extends React.Component {
 
   onColorVarSelect(e) {
     let value = document.querySelector("#colorVarSelect").value;
-    console.log("Color based on: ", value );
+    console.log("Color based on: ", value);
     this.setState({
       colorVar: value,
     });
@@ -99,7 +161,7 @@ class USMap extends React.Component {
   render() {
     const { topoJSON } = this.state;
 
-    console.log("Map Date: ", this.props.date);
+    console.log("Map Date: ", this.state.date);
 
     let map = topoJSON ? (
       <ComposableMap projection={"geoAlbersUsa"}>
@@ -141,7 +203,17 @@ class USMap extends React.Component {
 
     return (
       <div>
-        <select name="colorVarSelect" id="colorVarSelect" onChange={this.onColorVarSelect}>
+        <div className="TimelineContainer">
+          <TimeLine
+            idx={this.state.index}
+            onTimelineClick={this.onTimelineDateClick}
+          ></TimeLine>
+        </div>
+        <select
+          name="colorVarSelect"
+          id="colorVarSelect"
+          onChange={this.onColorVarSelect}
+        >
           <option value="volvo">Volvo</option>
           <option value="saab">Saab</option>
           <option value="mercedes">Mercedes</option>
