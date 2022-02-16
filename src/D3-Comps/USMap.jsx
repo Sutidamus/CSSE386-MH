@@ -66,6 +66,7 @@ class USMap extends React.Component {
       csvData: [],
       date: VALUES[0],
       index: 0,
+      colorVar: "% Uninsured",
     };
     this.topoURL = "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json";
     // this.dimensions = useResizeObserver
@@ -75,10 +76,31 @@ class USMap extends React.Component {
     this.onColorVarSelect = this.onColorVarSelect.bind(this);
     this.onTimelineDateClick = this.onTimelineDateClick.bind(this);
     this.csvData = [];
-  }p
+    this.csvFields = [
+      "Group",
+      "State",
+      "Subgroup",
+      "Phase",
+      "Time Period",
+      "Time Period Start Date",
+      "Time Period End Date",
+      "% Uninsured",
+      "% with Public Health Insurance",
+      "% with Private Health Insurance",
+      "% with Delayed Medical Care",
+      "% Did Not Get Needed Medical Care",
+      "% Took Prescription Medication for Mental Health",
+      "% Recieved Counseling or Therapy",
+      "% Did Not Get Needed Counseling or Therapy",
+      "% Adults that Used Telemedicine",
+      "% Households with Child that Used Telemedicine",
+      "% with Depressive Symptoms",
+      "% with Anxiety Symptoms",
+    ];
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState != this.state
+    return nextState != this.state;
   }
 
   componentDidMount() {
@@ -88,6 +110,8 @@ class USMap extends React.Component {
     ).then((data) => {
       console.log("D3 CSV Data: ", data);
       this.csvData = data;
+      console.log("CSV Fields: ", Object.keys(data[0]));
+      // this.csvFields = Object.keys(data[0]);
     });
   }
 
@@ -106,12 +130,15 @@ class USMap extends React.Component {
 
   onTimelineDateClick(value) {
     console.log("Wrapper Date", VALUES[value]);
-    this.setState({
-      date: VALUES[value],
-      index: value,
-    }, newState => {
-      this.fetchData()
-    })
+    this.setState(
+      {
+        date: VALUES[value],
+        index: value,
+      },
+      (newState) => {
+        this.fetchData();
+      }
+    );
   }
 
   filterData(topoJSON) {
@@ -162,9 +189,9 @@ class USMap extends React.Component {
     const { topoJSON } = this.state;
 
     console.log("Map Date: ", this.state.date);
-
+    // let colorVar = document.querySelector("select").value;
     let map = topoJSON ? (
-      <ComposableMap projection={"geoAlbersUsa"}>
+      <ComposableMap projection={"geoAlbersUsa"} width={1600}>
         <Geographies geography={this.state.topoJSON}>
           {({ geographies }) =>
             geographies.map((geo) => (
@@ -172,7 +199,9 @@ class USMap extends React.Component {
                 key={geo.rsmKey}
                 stroke="#FFF"
                 geography={geo}
-                fill={colorScale((geo.properties["% Uninsured"] / 100) * 1.5)}
+                fill={colorScale(
+                  (geo.properties[this.state.colorVar] / 100) * 1.5
+                )}
                 onClick={this.handleClick(geo.properties)}
               />
             ))
@@ -180,26 +209,28 @@ class USMap extends React.Component {
         </Geographies>
       </ComposableMap>
     ) : (
-      <ComposableMap projection={"geoAlbersUsa"}>
-        <Geographies geography={this.topoURL}>
-          {({ geographies }) =>
-            geographies.map((geo) => (
-              <Geography
-                key={geo.rsmKey}
-                stroke="#FFF"
-                geography={geo}
-                fill="#ffedea"
-                onClick={this.handleClick(geo.properties)}
-              />
-            ))
-          }
-        </Geographies>
-      </ComposableMap>
+      <div>
+        <h3 style={{color: "white"}}>Click a timeline date to update map</h3>
+        <ComposableMap projection={"geoAlbersUsa"} width={1600}>
+          <Geographies geography={this.topoURL}>
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  stroke="#FFF"
+                  geography={geo}
+                  fill="#ffedea"
+                  onClick={this.handleClick(geo.properties)}
+                />
+              ))
+            }
+          </Geographies>
+        </ComposableMap>
+      </div>
     );
 
-    if (this.state.topoJSON) {
-      console.log("Rendered: ", this.state.topoJSON.objects.states.geometries);
-    } else Math.random();
+    let selectableCSVFields = this.csvFields.filter((str) => str[0] == "%");
+
 
     return (
       <div>
@@ -214,10 +245,9 @@ class USMap extends React.Component {
           id="colorVarSelect"
           onChange={this.onColorVarSelect}
         >
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
+          {selectableCSVFields.map((field) => (
+            <option>{field}</option>
+          ))}
         </select>
         {map}
         <input type="data" id="dateSelect" min="2020-01-01" max="2022-01-14" />
