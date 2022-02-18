@@ -116,7 +116,31 @@ class USMap extends React.Component {
   }
 
   handleClick(geo) {
-    return () => this.fetchData();
+    return (e) => {
+      console.log("Geo properties:" ,geo)
+      console.log("Clicked X position: ", e.pageX)
+      let popUp = document.querySelector("#popUpDiv");
+      // popUp.style.display = "block";
+
+      popUp.innerHTML = ""
+
+      popUp.style.position = "absolute";
+      popUp.style.left = `${e.pageX}px`
+      popUp.style.top = `${e.pageY}px`
+
+      popUp.style.removeProperty("display");
+      // popUp.style.display = "";
+      
+      let button = `<div id="viewMoreContainer"><button id="viewMoreButton">VIEW PLOTS</button></div>`
+      popUp.innerHTML +=button + '\n'
+
+      this.csvFields.map( field => field === "State" ? popUp.innerHTML+=`<h3>${field}: ${geo[field]}</h3>` : popUp.innerHTML+=`<p>${field}: ${geo[field]}</p>`)
+      
+      
+      
+
+
+    };
   }
 
   fetchData() {
@@ -249,6 +273,7 @@ class USMap extends React.Component {
             <option>{field}</option>
           ))}
         </select>
+        <div id="popUpDiv" style={{display: "none"}}></div>
         {map}
         <input type="data" id="dateSelect" min="2020-01-01" max="2022-01-14" />
         <button onClick={this.fetchData}>GO</button>

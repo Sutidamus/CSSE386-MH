@@ -49,3 +49,22 @@ path:hover {
   opacity: 0.50;
   cursor: pointer;
 }
+
+#popUpDiv {
+  width: 300px;
+  height: 300px;
+  overflow-y: scroll;
+  background-color: white;
+  padding-left: 15px;
+  text-align: left;
+
+}
+
+#viewMoreButton {
+  
+  
+}
+
+#viewMoreContainer {
+  text-align: right;
+}
