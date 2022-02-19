@@ -154,6 +154,7 @@ class USMap extends React.Component {
 
   onTimelineDateClick(value) {
     console.log("Wrapper Date", VALUES[value]);
+    this.props.wrapperUpdate(VALUES[value]);
     this.setState(
       {
         date: VALUES[value],
