@@ -204,6 +204,7 @@ class USMap extends React.Component {
 
   onColorVarSelect(e) {
     let value = document.querySelector("#colorVarSelect").value;
+    this.props.wrapperUpdateQuerySelector(value);
     console.log("Color based on: ", value);
     this.setState({
       colorVar: value,

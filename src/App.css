@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #282c34;
+  background-color: #879cdf;
 }
 
 .App-logo {
@@ -15,7 +15,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #879cdf;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,4 +67,17 @@ path:hover {
 
 #viewMoreContainer {
   text-align: right;
+}
+
+#barContainer{
+  float: left;
+  background-color: #879cdf;
+}
+
+.tooltip{
+  font-size: small;
+}
+
+.bar{
+  fill: aqua;
 }

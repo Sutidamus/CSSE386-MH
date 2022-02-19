@@ -13,16 +13,28 @@ class Wrapper extends React.Component {
     super(props);
 
     this.state = {
-      date: "2020-04-23"
+      date: "2020-04-23",
+      querySelector: "% Uninsured",
     }
 
     this.updateDate = this.updateDate.bind(this);
+    this.updatequerySelector = this.updatequerySelector.bind(this);
   }
   
   updateDate(date){
+    const oldqf = this.state.querySelector;
     this.setState({
-      date: date
-    })
+      date: date,
+      querySelector: oldqf
+    });
+  }
+
+  updatequerySelector(querySelector){
+    const olddate = this.state.date;
+    this.setState({
+      date: olddate,
+      querySelector: querySelector
+    });
   }
 
   render() {
@@ -32,9 +44,9 @@ class Wrapper extends React.Component {
           <h3>Mental Health Stats During COVID-19</h3>
         </div>
         <div className="main">
-          <USMap wrapperUpdate={this.updateDate}></USMap>
+          <USMap wrapperUpdate={this.updateDate} wrapperUpdateQuerySelector={this.updatequerySelector}></USMap>
         </div>
-        <BarChart date={this.state.date}></BarChart>
+        <BarChart date={this.state.date} querySelector={this.state.querySelector}></BarChart>
       </div>
     );
   }
