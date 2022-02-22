@@ -1,6 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
-import { scaleBand, scaleLinear, axisBottom, axisRight } from "d3";
+import { scaleBand, scaleLinear, axisBottom, axisRight, text } from "d3";
 
 
 function getWidth() {
@@ -108,13 +108,15 @@ class SingleBarChart extends React.Component {
       .domain(data.map((d) => d.Subgroup))
       .padding(0.2);
 
+
+    // let textRotationAngle = this.props.group ==='By State' ? -55 : -15;
     svg
       .append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(d3.axisBottom(x))
       .selectAll("text")
-      .attr("transform", "rotate(-15)")
-      .style("text-anchor", "end");
+      .attr("transform", `rotate(${this.props.xAxisRotAngle})`)
+      .style("text-anchor", this.props.textAnchor ? "end": "");
 
     // Add Y axis
     const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
