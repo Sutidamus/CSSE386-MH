@@ -60,7 +60,8 @@ class Wrapper extends React.Component {
               date={this.state.date}
               group="By Age"
               width={500}
-              height={600}
+              height={400}
+              percentWidth={0.2}
               stat={this.state.querySelector}
               fill="darkred"
               title={"By Age: " + this.state.querySelector}
@@ -70,7 +71,8 @@ class Wrapper extends React.Component {
               date={this.state.date}
               group="By Education"
               width={1000}
-              height={600}
+              percentWidth={0.5}
+              height={400}
               stat={this.state.querySelector}
               fill="darkblue"
               title={"By Education: " + this.state.querySelector}
@@ -80,7 +82,8 @@ class Wrapper extends React.Component {
               date={this.state.date}
               group="By Sex"
               width={500}
-              height={600}
+              percentWidth={0.2}
+              height={400}
               stat={this.state.querySelector}
               fill="darkgreen"
               title={"By Gender: " + this.state.querySelector}
@@ -92,7 +95,8 @@ class Wrapper extends React.Component {
               date={this.state.date}
               group="By Race/Hispanic ethnicity"
               width={500}
-              height={600}
+              height={400}
+              percentWidth={0.25}
               stat={this.state.querySelector}
               fill="darkgray"
               title={"By Race/Hispanic Ethnicity: " + this.state.querySelector}
@@ -103,7 +107,8 @@ class Wrapper extends React.Component {
               date={this.state.date}
               group="By State"
               width={1800}
-              height={600}
+              height={400}
+              percentWidth={0.7}
               stat={this.state.querySelector}
               fill="darkorange"
               title={"National Average: " + this.state.querySelector}

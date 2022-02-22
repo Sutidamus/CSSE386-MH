@@ -2,6 +2,27 @@ import React from "react";
 import * as d3 from "d3";
 import { scaleBand, scaleLinear, axisBottom, axisRight } from "d3";
 
+
+function getWidth() {
+  return Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    document.body.offsetWidth,
+    document.documentElement.offsetWidth,
+    document.documentElement.clientWidth
+  );
+}
+
+function getHeight() {
+  return Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.documentElement.clientHeight
+  );
+}
+
 class SingleBarChart extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +64,7 @@ class SingleBarChart extends React.Component {
 
   drawChart(groupFilter, subgroupList) {
     const margin = { top: 30, right: 30, bottom: 70, left: 60 },
-      width = this.props.width - margin.left - margin.right,
+      width = (this.props.percentWidth * getWidth() )- margin.left - margin.right,
       height = this.props.height - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
