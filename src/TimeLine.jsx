@@ -69,11 +69,15 @@ export default class TimeLine extends React.Component {
         <div style={{ width: "95%", height: "100px", margin: "0 auto" }}>
           <HorizontalTimeline
             index={this.state.value}
+            minEventPadding={100}
+            titleWidth={300}
             indexClick={(index) => {
               this.setState({ value: index, previous: this.state.value });
               this.props.onTimelineClick(index)
             }}
+            styles={{ background: '#f8f8f8', foreground: '#377cd6', outline: '#dfdfdf' }}
             values={VALUES}
+            style={{backgroundColor: "#f8f8f8"}}
           />
         </div>
       </div>

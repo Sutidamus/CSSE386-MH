@@ -1,6 +1,11 @@
 .App {
   text-align: center;
-  background-color: #879cdf;
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background-image: linear-gradient(135deg, #444cf7 25%, transparent 80%), linear-gradient(225deg, #444cf7 25%, transparent 80%), linear-gradient(45deg, #444cf7 25%, transparent 80%), linear-gradient(315deg, #444cf7 25%, #e5e5f7 80%);
+  background-position: 10px 0, 10px 0, 0 0, 0 0;
+  background-size: 10px 10px;
+  background-repeat: repeat;
 }
 
 .App-logo {
@@ -15,7 +20,7 @@
 }
 
 .App-header {
-  background-color: #879cdf;
+  /* background-color: #879cdf; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,9 +29,10 @@
   color: white;
 }
 
-.TimelineContainer{
-  padding-top: 1%;
+.TimelineContainer {
+  padding-top: 30px;
   background-color: white;
+  overflow: visible;
 }
 
 .App-link {
@@ -37,6 +43,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -45,6 +52,7 @@
 path {
   pointer-events: all;
 }
+
 path:hover {
   opacity: 0.50;
   cursor: pointer;
@@ -57,27 +65,57 @@ path:hover {
   background-color: white;
   padding-left: 15px;
   text-align: left;
+  opacity: 87%;
+  /* background-color: rgb(172, 187, 238); */
 
 }
 
-#viewMoreButton {
-  
-  
+#viewMoreButton {}
+
+#popUpStateName {
+  text-align: center;
 }
 
 #viewMoreContainer {
   text-align: right;
 }
 
-#barContainer{
+#barContainer {
   float: left;
-  background-color: #879cdf;
+  background-color: #3b3bfb;
+  opacity: 0.7;
+  background-size: 10px 10px;
+  background-image: repeating-linear-gradient(45deg, #000cf4 0, #000cf4 1px, #3b3bfb 0, #3b3bfb 50%);
+  color: white;
+}
+/* 
+#barContainer2 svg{
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 10px 10px 30px black ;
+} */
+.chartContainer {
+  margin: 20px 20px;
 }
 
-.tooltip{
+.chartContainer svg{
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 10px 10px 30px black ;
+}
+
+.tooltip {
   font-size: small;
 }
 
-.bar{
+.bar {
   fill: aqua;
+}
+
+.chartTitle {
+  color: white
+}
+
+#allChartsContainer {
+  display: flex;
 }

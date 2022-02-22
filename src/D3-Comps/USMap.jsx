@@ -121,20 +121,26 @@ class USMap extends React.Component {
       console.log("Clicked X position: ", e.pageX)
       let popUp = document.querySelector("#popUpDiv");
       // popUp.style.display = "block";
+      let width = 300;
+      let height = 300;
 
       popUp.innerHTML = ""
 
       popUp.style.position = "absolute";
-      popUp.style.left = `${e.pageX}px`
-      popUp.style.top = `${e.pageY}px`
+      popUp.style.left = `${e.pageX-20}px`
+      popUp.style.top = `${e.pageY-20}px`
 
       popUp.style.removeProperty("display");
+
+      popUp.onmouseleave = () => {
+        popUp.style.display = "none";
+      }
       // popUp.style.display = "";
       
-      let button = `<div id="viewMoreContainer"><button id="viewMoreButton">VIEW PLOTS</button></div>`
-      popUp.innerHTML +=button + '\n'
-
-      this.csvFields.map( field => field === "State" ? popUp.innerHTML+=`<h3>${field}: ${geo[field]}</h3>` : popUp.innerHTML+=`<p>${field}: ${geo[field]}</p>`)
+      // let button = `<div id="viewMoreContainer"><button id="viewMoreButton">VIEW PLOTS</button></div>`
+      // popUp.innerHTML +=button + '\n'
+      let popUpFields = this.csvFields.filter(field => field[0] === '%' || field.includes("Time") || field === "State")
+      popUpFields.map( field => field === "State" ? popUp.innerHTML+=`<h3 id="popUpStateName">${field}: ${geo[field]}</h3><hr><hr>` : popUp.innerHTML+=`<p>${field}: ${geo[field]}</p>`)
       
       
       
@@ -260,12 +266,6 @@ class USMap extends React.Component {
 
     return (
       <div>
-        <div className="TimelineContainer">
-          <TimeLine
-            idx={this.state.index}
-            onTimelineClick={this.onTimelineDateClick}
-          ></TimeLine>
-        </div>
         <select
           name="colorVarSelect"
           id="colorVarSelect"
@@ -277,8 +277,12 @@ class USMap extends React.Component {
         </select>
         <div id="popUpDiv" style={{display: "none"}}></div>
         {map}
-        <input type="data" id="dateSelect" min="2020-01-01" max="2022-01-14" />
-        <button onClick={this.fetchData}>GO</button>
+        <div className="TimelineContainer">
+          <TimeLine
+            idx={this.state.index}
+            onTimelineClick={this.onTimelineDateClick}
+          ></TimeLine>
+        </div>
       </div>
     );
   }
